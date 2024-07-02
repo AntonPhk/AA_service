@@ -1,0 +1,1 @@
+Authentication and authorisation microservice. Author: Anton Pyshkaila
