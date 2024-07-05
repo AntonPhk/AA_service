@@ -1,0 +1,36 @@
+networks:
+  to-do-app-network:
+
+services:
+  postgres:
+    container_name: ${POSTGRES_CONTAINER_HOST}
+    image: postgres:16.2-alpine
+    ports:
+      - ${POSTGRES_PORT}:5432
+    networks:
+      - to-do-app-network
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pg_auth_data:/var/lib/postgresql/data
+
+  app:
+    container_name: auth_service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/src
+    ports:
+      - 8081:8081
+    networks:
+      - to-do-app-network
+    environment:
+      POSTGRES_HOST: ${POSTGRES_CONTAINER_HOST}
+    restart: always
+
+volumes:
+  pg_auth_data:
+    driver: local
