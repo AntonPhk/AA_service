@@ -32,10 +32,8 @@ COPY --from=builder /tmp/requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-
+# Copying project files
 COPY . .
-# Expose port
-EXPOSE 8000
 
 # Change to safety role
 USER myuser
