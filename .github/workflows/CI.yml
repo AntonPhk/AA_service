@@ -38,7 +38,10 @@ jobs:
         run: pip install ruff
 
       - name: Run linter
-        run: ruff-format
+        run: ruff check --fix
+
+      - name: Run formatter
+        run: ruff format
 
 #  test:
 ##    runs-on: ubuntu-latest
