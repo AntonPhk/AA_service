@@ -1,0 +1,53 @@
+# Ignore virtual environment directories
+.venv
+
+# Ignore files and directories created by IDEs
+.vscode/
+.idea/
+*.code-workspace
+
+# Ignore files and directories related to testing
+.tox/
+.pytest_cache/
+coverage/
+.coverage
+.coverage.*
+
+# Ignore caches and temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore log and report files
+logs/
+*.log
+*.out
+*.tmp
+*.temp
+
+# Ignore build artifacts and distributions
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+*.tar.gz
+*.zip
+
+# Ignore Docker and CI/CD configuration files (if not needed in the container)
+.dockerignore
+Dockerfile
+.docker/
+.gitlab-ci.yml
+.github/
+.circleci/
+
+# Ignore source documentation and static files
+docs/
+*.md
+
+# Ignore version control directories and files
+.git/
+.hg/
+.svn/
