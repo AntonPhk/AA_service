@@ -1,7 +1,8 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
 from annotated_types import MaxLen, MinLen
 from pydantic import EmailStr, HttpUrl, field_validator, BaseModel
+from src.schemas.role import RoleBaseSchema
 
 
 class UserBaseSchema(BaseModel):
@@ -31,9 +32,22 @@ class PasswordSchema(BaseModel):
 class UserRegistrationSchema(UserBaseSchema, PasswordSchema): ...
 
 
-class UserUpdateSchema(UserBaseSchema):
-    image_url: Annotated[str, HttpUrl]
+class UserPhotoSchema(BaseModel):
+    image_url: HttpUrl
+
+
+class UserUpdateSchema(BaseModel):
+    name: Optional[Annotated[str, MinLen(3), MaxLen(15)]] = None
+    surname: Optional[Annotated[str, MinLen(3), MaxLen(15)]] = None
+    username: Optional[Annotated[str, MinLen(3), MaxLen(15)]] = None
+    email: Optional[EmailStr] = None
+    image_url: Optional[HttpUrl] = None
 
 
 class UserUpdateByAdminSchema(UserUpdateSchema):
-    role: str
+    password: Optional[PasswordSchema] = None
+    role_id: Optional[int] = None
+
+
+class UserResponseSchema(UserUpdateSchema):
+    role: RoleBaseSchema
