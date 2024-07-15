@@ -2,7 +2,7 @@ from typing import Annotated, Optional
 
 from annotated_types import MaxLen, MinLen
 from pydantic import EmailStr, HttpUrl, field_validator, BaseModel
-from src.schemas.role import RoleBaseSchema
+from src.schemas.roles_and_permissions import RoleBaseSchema
 
 
 class UserBaseSchema(BaseModel):

@@ -1,4 +1,4 @@
-from src.models.user import Users as Users
-from src.models.user import Roles as Roles
-from src.models.user import Permissions as Permissions
+from src.models.user import User as User
+from src.models.user import Role as Role
+from src.models.user import Permission as Permission
 from src.models.user import RolesAndPermissions as RolesAndPermissions
