@@ -8,6 +8,7 @@ from src.ports.database_interface import DatabaseInterface
 from sqlalchemy import select, update, asc, desc
 from pydantic import BaseModel
 from src.repositories.core import DBSessionMixin
+from src.services.exceptions import UserNotFoundException
 
 
 class UserRepository(DatabaseInterface, DBSessionMixin):
@@ -22,8 +23,9 @@ class UserRepository(DatabaseInterface, DBSessionMixin):
         )
 
         result = await self.db.scalars(stmt)
-        result = result.first()
-        return result
+        if not (user := result.first()):
+            raise UserNotFoundException
+        return user
 
     async def get_by_id(self, user_id: uuid.UUID):
         stmt = (
@@ -33,7 +35,8 @@ class UserRepository(DatabaseInterface, DBSessionMixin):
         )
 
         result = await self.db.execute(stmt)
-        user = result.scalars().first()
+        if not (user := result.scalars().first()):
+            raise UserNotFoundException
         return user
 
     async def get_all(

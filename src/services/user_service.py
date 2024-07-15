@@ -38,8 +38,7 @@ class UserService:
     async def signup(self, user: UserRegistrationSchema):
         try:
             user.password = get_password_hash(user.password)
-            result = await self.db.create(user)
-            return result
+            return await self.db.create(user)
         except IntegrityError as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -47,8 +46,7 @@ class UserService:
             )
 
     async def login(self, login: str, password: str):
-        user = await self.db.get(login)
-        if not user:
+        if not (user := await self.db.get(login)):
             raise UserNotFoundException
         if verify_password(password, user.password):
             try:
@@ -73,7 +71,7 @@ class UserService:
             password.password = get_password_hash(password=password.password)
             user_id = payload["user_id"]
             await self.db.update(user_id, password)
-            return {"message": "Password updated successfully."}
+            return {"detail": "Password updated successfully."}
         except jwt.ExpiredSignatureError:
             raise ExpiredTokenException
         except jwt.InvalidTokenError:
@@ -104,8 +102,7 @@ class UserService:
         except jwt.InvalidTokenError:
             raise CredentialsException
         if PermissionsValidator.validate(role=user_role):
-            user = await self.db.get_by_id(user_id=user_id)
-            if not user:
+            if not (user := await self.db.get_by_id(user_id=user_id)):
                 raise UserNotFoundException
             else:
                 return user

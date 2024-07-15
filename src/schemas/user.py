@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 
 from annotated_types import MaxLen, MinLen
 from pydantic import EmailStr, HttpUrl, field_validator, BaseModel
-from src.schemas.roles_and_permissions import RoleWithPermissionsSchema
+from src.schemas.roles_and_permissions import RoleWithPermissionsSchema, RoleBaseSchema
 
 
 class UserBaseSchema(BaseModel):
@@ -51,9 +51,10 @@ class UserUpdateByAdminSchema(UserUpdateSchema):
 
 
 class UserResponseSchema(UserUpdateSchema):
-    role: RoleWithPermissionsSchema
+    role: RoleBaseSchema
 
 
 class UserResponseByAdminSchema(UserResponseSchema):
+    role: RoleWithPermissionsSchema
     created_at: datetime.datetime
     updated_at: datetime.datetime

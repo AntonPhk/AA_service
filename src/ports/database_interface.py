@@ -6,13 +6,10 @@ class DatabaseInterface(ABC):
     async def get(self, *args, **kwargs): ...
 
     @abstractmethod
-    async def create(self, *args, **kwargs):
-        pass
+    async def create(self, *args, **kwargs): ...
 
     @abstractmethod
-    async def update(self, *args, **kwargs):
-        pass
+    async def update(self, *args, **kwargs): ...
 
     @abstractmethod
-    async def delete(self, *args, **kwargs):
-        pass
+    async def delete(self, *args, **kwargs): ...

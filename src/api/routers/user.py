@@ -24,7 +24,7 @@ async def get_user(
     return await user_service.get_user(token=token)
 
 
-@router.get("/me/{user_id}", response_model=UserResponseSchema)
+@router.get("/{user_id}", response_model=UserResponseSchema)
 async def get_user_by_id(
     token: Annotated[str, Depends(oauth2_scheme)],
     user_id: UUID,
@@ -62,7 +62,7 @@ async def update_user(
     return await user_service.update_user(token=token, user=update_info)
 
 
-@router.patch("/me/{user_id}", response_model=UserUpdateByAdminSchema)
+@router.patch("/{user_id}", response_model=UserUpdateByAdminSchema)
 async def update_user_by_id(
     update_info: UserUpdateSchema,
     user_id: UUID,
@@ -82,7 +82,7 @@ async def delete_user(
     return await user_service.delete_user(token=token)
 
 
-@router.delete("/me{user_id}")
+@router.delete("{user_id}")
 async def delete_user_by_id(
     token: Annotated[str, Depends(oauth2_scheme)],
     user_id: UUID,
