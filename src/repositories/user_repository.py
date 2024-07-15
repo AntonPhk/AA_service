@@ -1,10 +1,11 @@
 import uuid
+from typing import Any, Optional
 
 from sqlalchemy.orm import selectinload
 
 from src.models.user import User, Role
 from src.ports.database_interface import DatabaseInterface
-from sqlalchemy import select, update
+from sqlalchemy import select, update, asc, desc
 from pydantic import BaseModel
 from src.repositories.core import DBSessionMixin
 
@@ -34,6 +35,36 @@ class UserRepository(DatabaseInterface, DBSessionMixin):
         result = await self.db.execute(stmt)
         user = result.scalars().first()
         return user
+
+    async def get_all(
+        self,
+        page: int = 1,
+        limit: int = 10,
+        order_by: str = "asc",
+        filter_by_role: Optional[str] = None,
+        sort_by: Any = None,
+    ):
+        stmt = select(
+            self.model,
+        ).options(selectinload(User.role).selectinload(Role.permissions))
+
+        if filter_by_role:
+            stmt = stmt.where(User.role.has(name=filter_by_role))
+
+        if sort_by:
+            sort_column = getattr(self.model, sort_by, None)
+            if sort_column:
+                if order_by == "asc":
+                    stmt = stmt.order_by(asc(sort_column))
+                elif order_by == "desc":
+                    stmt = stmt.order_by(desc(sort_column))
+
+        offset_value = (page - 1) * limit
+        stmt = stmt.offset(offset_value).limit(limit)
+
+        result = await self.db.execute(stmt)
+        users = result.scalars().all()
+        return users
 
     async def create(self, user: BaseModel):
         values = user.model_dump()

@@ -1,9 +1,14 @@
-from typing import Annotated
+from typing import Annotated, Optional, Any
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
 
-from src.schemas.user import UserResponseSchema, UserUpdateSchema
+from src.schemas.user import (
+    UserResponseSchema,
+    UserUpdateSchema,
+    UserResponseByAdminSchema,
+    UserUpdateByAdminSchema,
+)
 from src.services.user_service import UserService
 from src.api.dependencies import get_user_service
 from src.services.utils import oauth2_scheme
@@ -28,6 +33,26 @@ async def get_user_by_id(
     return await user_service.get_user_by_id(token=token, user_id=user_id)
 
 
+@router.get("/all", response_model=list[UserResponseByAdminSchema])
+async def get_all_users(
+    token: Annotated[str, Depends(oauth2_scheme)],
+    page: int = 1,
+    limit: int = 10,
+    order_by: str = "asc",
+    filter_by_role: Optional[str] = None,
+    sort_by: Any = None,
+    user_service: UserService = Depends(get_user_service),
+):
+    return await user_service.get_all_users(
+        token=token,
+        page=page,
+        limit=limit,
+        order_by=order_by,
+        filter_by_role=filter_by_role,
+        sort_by=sort_by,
+    )
+
+
 @router.patch("/me", response_model=UserUpdateSchema)
 async def update_user(
     update_info: UserUpdateSchema,
@@ -37,7 +62,7 @@ async def update_user(
     return await user_service.update_user(token=token, user=update_info)
 
 
-@router.patch("/me/{user_id}", response_model=UserUpdateSchema)
+@router.patch("/me/{user_id}", response_model=UserUpdateByAdminSchema)
 async def update_user_by_id(
     update_info: UserUpdateSchema,
     user_id: UUID,

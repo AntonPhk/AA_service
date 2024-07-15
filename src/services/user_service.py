@@ -2,7 +2,7 @@ from uuid import UUID
 
 import jwt
 from starlette import status
-from typing import Annotated
+from typing import Annotated, Optional, Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -103,16 +103,41 @@ class UserService:
             raise ExpiredTokenException
         except jwt.InvalidTokenError:
             raise CredentialsException
-        except ValueError:
-            raise InvalidPasswordException
-        except ConnectionRefusedError:
-            raise ExternalErrorException
         if PermissionsValidator.validate(role=user_role):
             user = await self.db.get_by_id(user_id=user_id)
             if not user:
                 raise UserNotFoundException
             else:
                 return user
+        else:
+            raise CredentialsException
+
+    async def get_all_users(
+        self,
+        token: str,
+        page: int = 1,
+        limit: int = 10,
+        order_by: str = "asc",
+        filter_by_role: Optional[str] = None,
+        sort_by: Any = None,
+    ):
+        try:
+            payload = get_payload(token)
+            user_role = payload["user_role"]
+
+        except jwt.ExpiredSignatureError:
+            raise ExpiredTokenException
+        except jwt.InvalidTokenError:
+            raise CredentialsException
+        if PermissionsValidator.validate(role=user_role):
+            user = await self.db.get_all(
+                page=page,
+                limit=limit,
+                order_by=order_by,
+                filter_by_role=filter_by_role,
+                sort_by=sort_by,
+            )
+            return user
         else:
             raise CredentialsException
 
