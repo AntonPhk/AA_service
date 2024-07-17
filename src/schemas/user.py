@@ -1,8 +1,8 @@
 import datetime
-from typing import Annotated, Optional
+from typing import Annotated, Optional, Any
 
 from annotated_types import MaxLen, MinLen
-from pydantic import EmailStr, HttpUrl, field_validator, BaseModel
+from pydantic import EmailStr, HttpUrl, field_validator, BaseModel, field_serializer
 from src.schemas.roles_and_permissions import RoleWithPermissionsSchema, RoleBaseSchema
 
 
@@ -33,16 +33,16 @@ class PasswordSchema(BaseModel):
 class UserRegistrationSchema(UserBaseSchema, PasswordSchema): ...
 
 
-class UserPhotoSchema(BaseModel):
-    image_url: HttpUrl
-
-
 class UserUpdateSchema(BaseModel):
     name: Optional[Annotated[str, MinLen(3), MaxLen(15)]] = None
     surname: Optional[Annotated[str, MinLen(3), MaxLen(15)]] = None
     username: Optional[Annotated[str, MinLen(3), MaxLen(15)]] = None
     email: Optional[EmailStr] = None
     image_url: Optional[HttpUrl] = None
+
+    @field_serializer("image_url")
+    def serialize_image_url(self, value: Any) -> str:
+        return str(value)
 
 
 class UserUpdateByAdminSchema(UserUpdateSchema):
@@ -58,3 +58,9 @@ class UserResponseByAdminSchema(UserResponseSchema):
     role: RoleWithPermissionsSchema
     created_at: datetime.datetime
     updated_at: datetime.datetime
+
+
+class UserResponseUpdateByAdminSchema(UserUpdateSchema):
+    role_id: Optional[int] = None
+    created_at: Optional[datetime.datetime] = None
+    updated_at: Optional[datetime.datetime] = None

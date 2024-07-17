@@ -55,9 +55,6 @@ def get_payload(token: str) -> dict:
 
 class PermissionsValidator:
     @staticmethod
-    def _is_admin(role: str) -> bool:
-        return role == "admin"
-
-    @staticmethod
-    def validate(role: str) -> bool:
-        return PermissionsValidator._is_admin(role)
+    def validate(role: str, required_role: str) -> bool:
+        role_hierarchy = {"admin": ["admin", "user"], "user": ["user"]}
+        return required_role in role_hierarchy.get(role, [])

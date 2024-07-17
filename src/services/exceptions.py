@@ -48,6 +48,18 @@ class UserNotFoundException(HTTPException):
         super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
 
+class RoleNotFoundException(HTTPException):
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail="Role not found")
+
+
+class PermissionNotFoundException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Permission not found"
+        )
+
+
 class BlacklistedTokenException(HTTPException):
     def __init__(self):
         super().__init__(
@@ -68,4 +80,20 @@ class DuplicateCredentialsException(HTTPException):
         super().__init__(
             status_code=status.HTTP_409_CONFLICT,
             detail="User with this username/phone number/email already exists.",
+        )
+
+
+class DuplicateRoleException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Role already exists.",
+        )
+
+
+class DuplicatePermissionException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Permission already exists.",
         )
