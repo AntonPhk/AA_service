@@ -51,3 +51,5 @@ class User(BaseModel):
     role_id: Mapped[int] = mapped_column(ForeignKey("role.id"), default=1)
     role: Mapped["Role"] = relationship(back_populates="users")
     image_url: Mapped[str] = mapped_column(String(128), nullable=True)
+    is_verified: Mapped[bool] = mapped_column(default=False)
+    is_blocked: Mapped[bool] = mapped_column(default=False)

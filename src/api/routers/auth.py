@@ -2,8 +2,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-
-from src.schemas.user import UserBaseSchema, UserRegistrationSchema, PasswordSchema
+from pydantic import EmailStr
+from src.schemas.user import UserRegistrationSchema, PasswordSchema
 from src.schemas.token import TokenSchema
 
 from src.services.user_service import UserService
@@ -13,12 +13,20 @@ from src.services.utils import oauth2_scheme
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/signup", response_model=UserBaseSchema)
+@router.post("/signup")
 async def signup(
     user: UserRegistrationSchema,
     user_service: UserService = Depends(get_user_service),
 ):
     return await user_service.signup(user)
+
+
+@router.get("/confirm_registration")
+async def confirm_registration(
+    token: str,
+    user_service: UserService = Depends(get_user_service),
+):
+    return await user_service.confirm_registration(token=token)
 
 
 @router.post("/login", response_model=TokenSchema)
@@ -36,3 +44,27 @@ async def change_password(
     user_service: UserService = Depends(get_user_service),
 ):
     return await user_service.change_password(token=token, password=password)
+
+
+@router.get("/request_reset_password")
+async def request_reset_password(
+    email: EmailStr,
+    user_service: UserService = Depends(get_user_service),
+):
+    return await user_service.request_reset_password(email=email)
+
+
+@router.get("/reset_password")
+async def reset_password(
+    token: str,
+    user_service: UserService = Depends(get_user_service),
+):
+    return await user_service.reset_password(token=token)
+
+
+@router.get("/refresh_tokens")
+async def refresh_tokens(
+    token: str,
+    user_service: UserService = Depends(get_user_service),
+):
+    return await user_service.get_new_tokens(token=token)

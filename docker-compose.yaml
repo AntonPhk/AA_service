@@ -1,4 +1,18 @@
 services:
+
+  redis:
+    container_name: ${REDIS_CONTAINER_HOST}
+    image: redis:7.0.15-alpine
+    ports:
+      - ${REDIS_PORT}:6379
+    environment:
+      REDIS_USER: ${REDIS_USER}
+      REDIS_USER_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DATABASES: ${REDIS_DATABASES}
+    volumes:
+      - redis_auth_data:/data
+
   postgres:
     container_name: ${POSTGRES_CONTAINER_HOST}
     image: postgres:16.2-alpine
@@ -25,8 +39,11 @@ services:
       - 8001:8001
     environment:
       POSTGRES_HOST: ${POSTGRES_CONTAINER_HOST}
+      REDIS_HOST: ${REDIS_CONTAINER_HOST}
     restart: always
 
 volumes:
+  redis_auth_data:
+    driver: local
   pg_auth_data:
     driver: local

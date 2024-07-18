@@ -4,6 +4,7 @@ from src.services.utils import get_payload, PermissionsValidator
 from src.services.exceptions import (
     ExpiredTokenException,
     PermissionErrorException,
+    InvalidTokenException,
 )
 
 
@@ -14,7 +15,7 @@ class TokenService:
         except jwt.ExpiredSignatureError:
             raise ExpiredTokenException
         except jwt.InvalidTokenError:
-            raise PermissionErrorException
+            raise InvalidTokenException
 
     def validate_role(self, token: str, required_role: str):
         payload = self.get_payload(token)

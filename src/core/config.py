@@ -7,6 +7,8 @@ ENVDIR = str(pathlib.Path(__file__).parent.absolute()) + "/../.."
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=ENVDIR + "/.env")
 
+    SERVICE_URL: str
+
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
@@ -27,9 +29,19 @@ class Settings(BaseSettings):
     REDIS_USER: str
     REDIS_PASSWORD: str
     REDIS_DATABASES: int
+    REDIS_CONTAINER_HOST: str
+
+    @property
+    def redis_url(self):
+        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}"
 
     ROLES: str
     PERMISSIONS: str
+
+    SMTP_SERVER: str
+    SMTP_PORT: int
+    MAIL_USER: str
+    MAIL_PASSWORD: str
 
 
 settings = Settings()
