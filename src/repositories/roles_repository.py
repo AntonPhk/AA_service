@@ -37,10 +37,10 @@ class RoleRepository(BaseRepository):
 
         if sort_by:
             sort_column = getattr(self.model, sort_by, None)
-            if sort_column:
-                if order_by == "asc":
+            match order_by:
+                case "asc":
                     stmt = stmt.order_by(asc(sort_column))
-                elif order_by == "desc":
+                case "desc":
                     stmt = stmt.order_by(desc(sort_column))
 
         offset_value = (page - 1) * limit

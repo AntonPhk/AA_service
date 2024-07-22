@@ -39,4 +39,4 @@ COPY . .
 USER myuser
 
 # Set the command to run your application
-CMD ["sh", "entrypoint.sh"]
+ENTRYPOINT ["sh", "entrypoint.sh"]

@@ -33,10 +33,9 @@ async def get_all_roles(
     sort_by: Any = None,
     role_service: RoleService = Depends(get_role_service),
 ):
-    heh = await role_service.get_all_roles(
+    return await role_service.get_all_roles(
         token=token, page=page, limit=limit, order_by=order_by, sort_by=sort_by
     )
-    return heh
 
 
 @router.patch("/add_permission", response_model=RoleWithPermissionsSchema)
