@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
+from passlib.pwd import genword
 import jwt
 from src.core.config import settings
 from src.schemas.token import TokenSchema
@@ -20,6 +21,10 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
+
+
+def get_random_password() -> str:
+    return genword()
 
 
 def create_access_token(data: dict, expires_delta: timedelta):
@@ -55,9 +60,6 @@ def get_payload(token: str) -> dict:
 
 class PermissionsValidator:
     @staticmethod
-    def _is_admin(role: str) -> bool:
-        return role == "admin"
-
-    @staticmethod
-    def validate(role: str) -> bool:
-        return PermissionsValidator._is_admin(role)
+    def validate(role: str, required_role: str) -> bool:
+        role_hierarchy = {"admin": ["admin", "user"], "user": ["user"]}
+        return required_role in role_hierarchy.get(role, [])

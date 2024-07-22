@@ -1,9 +1,10 @@
 import datetime
-from typing import Annotated, Optional
+from typing import Annotated, Optional, Any
 
 from annotated_types import MaxLen, MinLen
-from pydantic import EmailStr, HttpUrl, field_validator, BaseModel
+from pydantic import EmailStr, HttpUrl, field_validator, BaseModel, field_serializer
 from src.schemas.roles_and_permissions import RoleWithPermissionsSchema, RoleBaseSchema
+from src.services.utils import get_password_hash
 
 
 class UserBaseSchema(BaseModel):
@@ -27,14 +28,10 @@ class PasswordSchema(BaseModel):
             raise ValueError("Password must contain at least one digit")
         if not any(char.isalpha() for char in value):
             raise ValueError("Password must contain at least one letter")
-        return value
+        return get_password_hash(value)
 
 
 class UserRegistrationSchema(UserBaseSchema, PasswordSchema): ...
-
-
-class UserPhotoSchema(BaseModel):
-    image_url: HttpUrl
 
 
 class UserUpdateSchema(BaseModel):
@@ -43,6 +40,10 @@ class UserUpdateSchema(BaseModel):
     username: Optional[Annotated[str, MinLen(3), MaxLen(15)]] = None
     email: Optional[EmailStr] = None
     image_url: Optional[HttpUrl] = None
+
+    @field_serializer("image_url")
+    def serialize_image_url(self, value: Any) -> str:
+        return str(value)
 
 
 class UserUpdateByAdminSchema(UserUpdateSchema):
@@ -58,3 +59,13 @@ class UserResponseByAdminSchema(UserResponseSchema):
     role: RoleWithPermissionsSchema
     created_at: datetime.datetime
     updated_at: datetime.datetime
+
+
+class UserResponseUpdateByAdminSchema(UserUpdateSchema):
+    role_id: Optional[int] = None
+    created_at: Optional[datetime.datetime] = None
+    updated_at: Optional[datetime.datetime] = None
+
+
+class ConfirmationAcceptSchema(BaseModel):
+    is_verified: Optional[bool] = None

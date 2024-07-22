@@ -10,11 +10,11 @@ class ExternalErrorException(HTTPException):
         )
 
 
-class CredentialsException(HTTPException):
+class NotVerifiedCredentialsException(HTTPException):
     def __init__(self):
         super().__init__(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
+            detail="User haven't been verified, check your email.",
         )
 
 
@@ -30,9 +30,9 @@ class ExpiredTokenException(HTTPException):
         super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail="Token expired")
 
 
-class InvalidUUIDException(HTTPException):
+class InvalidTokenException(HTTPException):
     def __init__(self):
-        super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid UUID.")
+        super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid token")
 
 
 class PermissionErrorException(HTTPException):
@@ -48,6 +48,18 @@ class UserNotFoundException(HTTPException):
         super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
 
+class RoleNotFoundException(HTTPException):
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail="Role not found")
+
+
+class PermissionNotFoundException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Permission not found"
+        )
+
+
 class BlacklistedTokenException(HTTPException):
     def __init__(self):
         super().__init__(
@@ -56,16 +68,25 @@ class BlacklistedTokenException(HTTPException):
         )
 
 
-class InvalidPasswordException(HTTPException):
-    def __init__(self):
-        super().__init__(
-            status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="Invalid password"
-        )
-
-
 class DuplicateCredentialsException(HTTPException):
     def __init__(self):
         super().__init__(
             status_code=status.HTTP_409_CONFLICT,
             detail="User with this username/phone number/email already exists.",
+        )
+
+
+class DuplicateRoleException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Role already exists.",
+        )
+
+
+class DuplicatePermissionException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Permission already exists.",
         )
