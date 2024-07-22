@@ -1,7 +1,7 @@
 from typing import Annotated, Optional
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import Permission
+from src.models import Permission
 from src.repositories.permission_repository import PermissionRepository
 from src.schemas.roles_and_permissions import PermissionBaseSchema
 from src.repositories.core import get_async_session

@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import Role
+from src.models import Role
 from src.repositories.permission_repository import PermissionRepository
 from src.services.token_service import TokenService
 from src.schemas.roles_and_permissions import RoleBaseSchema

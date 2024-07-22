@@ -4,6 +4,7 @@ from typing import Annotated, Optional, Any
 from annotated_types import MaxLen, MinLen
 from pydantic import EmailStr, HttpUrl, field_validator, BaseModel, field_serializer
 from src.schemas.roles_and_permissions import RoleWithPermissionsSchema, RoleBaseSchema
+from src.services.utils import get_password_hash
 
 
 class UserBaseSchema(BaseModel):
@@ -27,7 +28,7 @@ class PasswordSchema(BaseModel):
             raise ValueError("Password must contain at least one digit")
         if not any(char.isalpha() for char in value):
             raise ValueError("Password must contain at least one letter")
-        return value
+        return get_password_hash(value)
 
 
 class UserRegistrationSchema(UserBaseSchema, PasswordSchema): ...
@@ -64,3 +65,7 @@ class UserResponseUpdateByAdminSchema(UserUpdateSchema):
     role_id: Optional[int] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None
+
+
+class ConfirmationAcceptSchema(BaseModel):
+    is_verified: Optional[bool] = None
