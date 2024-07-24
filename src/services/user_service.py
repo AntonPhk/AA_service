@@ -110,7 +110,7 @@ class UserService:
         payload = self._token_service.get_payload(token)
         user_id = payload["user_id"]
         await self._repo.update(user_id, password)
-        return {"detail": "Password updated successfully."}
+        return {"detail": "Password changed successfully."}
 
     async def request_reset_password(self, email: str):
         user = await self._repo.get(email)
