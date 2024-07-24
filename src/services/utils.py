@@ -24,7 +24,7 @@ def get_password_hash(password: str) -> str:
 
 
 def get_random_password() -> str:
-    return genword(entropy=56)
+    return genword(entropy=56, length=16)
 
 
 def create_access_token(data: dict, expires_delta: timedelta):
