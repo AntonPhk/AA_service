@@ -32,11 +32,10 @@ COPY --from=builder /tmp/requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
+RUN apk add --no-cache make
+
 # Copying project files
 COPY . .
 
 # Change to safety role
 USER myuser
-
-# Set the command to run your application
-ENTRYPOINT ["sh", "entrypoint.sh"]
