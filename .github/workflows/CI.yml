@@ -55,10 +55,6 @@ jobs:
       - name: Install Poetry
         run: pip install poetry==1.8.2
 
-
-      - name: Copy .env.test to .env
-        run: cp .env.test .env
-
       - name: Install dependencies
         run: poetry install
 
