@@ -34,7 +34,10 @@ build-backend = "poetry.core.masonry.api"
 filterwarnings = [
     "ignore::DeprecationWarning",
 ]
-
+pythonpath = [
+    ".", "src"
+]
+asyncio_mode = "auto"
 
 [tool.coverage.run]
 branch = true
@@ -42,4 +45,4 @@ source = [
     "src"
 ]
 
-asyncio_mode = "auto"
+

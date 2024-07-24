@@ -45,7 +45,7 @@ Dockerfile
 
 # Ignore source documentation and static files
 docs/
-*.md
+
 
 # Ignore version control directories and files
 .git/

@@ -1,3 +1,4 @@
+import string
 from datetime import datetime, timedelta, timezone
 
 from fastapi.security import OAuth2PasswordBearer
@@ -24,7 +25,7 @@ def get_password_hash(password: str) -> str:
 
 
 def get_random_password() -> str:
-    return genword()
+    return genword(entropy=56, length=16, chars=string.ascii_letters + string.digits)
 
 
 def create_access_token(data: dict, expires_delta: timedelta):

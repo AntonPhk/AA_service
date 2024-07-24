@@ -39,28 +39,27 @@ jobs:
       - name: Run formatter
         run: ruff format
 
-#  test:
-##    runs-on: ubuntu-latest
-##    needs:
-##      - lint
-##    steps:
-##      - name: Checkout code
-##        uses: actions/checkout@v4
-##
-##      - name: Set up Python
-##        uses: actions/setup-python@v5
-##        with:
-##          python-version: '3.11'
-##
-##      - name: Install Poetry
-##        run: pip install poetry==1.8.2
-##
-##
-##      - name: Copy .env.test to .env
-##        run: cp .env.test .env
-##
-##      - name: Install dependencies
-##        run: poetry install
-##
-##      - name: Run tests
-##        run: poetry run pytest
+  test:
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: pip install poetry==1.8.2
+
+      - name: Copy .env.test to .env
+        run: cp .env.example .env
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run tests
+        run: poetry run pytest

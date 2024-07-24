@@ -13,7 +13,7 @@ from src.services.utils import oauth2_scheme
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/signup")
+@router.post("/signup", status_code=201)
 async def signup(
     user: UserRegistrationSchema,
     user_service: UserService = Depends(get_user_service),

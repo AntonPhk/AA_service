@@ -49,6 +49,7 @@ class UserUpdateSchema(BaseModel):
 class UserUpdateByAdminSchema(UserUpdateSchema):
     password: Optional[PasswordSchema] = None
     role_id: Optional[int] = None
+    is_blocked: Optional[bool] = None
 
 
 class UserResponseSchema(UserUpdateSchema):
@@ -65,6 +66,7 @@ class UserResponseUpdateByAdminSchema(UserUpdateSchema):
     role_id: Optional[int] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None
+    is_blocked: Optional[bool] = None
 
 
 class ConfirmationAcceptSchema(BaseModel):

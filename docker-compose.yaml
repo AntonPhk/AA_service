@@ -40,6 +40,8 @@ services:
     environment:
       POSTGRES_HOST: ${POSTGRES_CONTAINER_HOST}
       REDIS_HOST: ${REDIS_CONTAINER_HOST}
+    entrypoint:
+      ["make", "run-in-docker"]
     restart: always
 
 volumes:
